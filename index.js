@@ -2,6 +2,8 @@ import * as THREE from './three.js-master/build/three.module.js';
 import { GLTFLoader } from './three.js-master/examples/jsm/loaders/GLTFLoader.js';
 import { RGBELoader } from './three.js-master/examples/jsm/loaders/RGBELoader.js';
 import { OrbitControls } from './three.js-master/examples/jsm/controls/OrbitControls.js';
+import { DRACOLoader } from './three.js-master/examples/jsm/loaders/DRACOLoader.js';
+import { KTX2Loader } from './three.js-master/examples/jsm/loaders/KTX2Loader.js';
 
 // Select the canvas element
 const canvas = document.querySelector('.webgl');
@@ -34,52 +36,60 @@ scene.add(light);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true; // Enable smooth motion
 controls.dampingFactor = 0.2; // Damping inertia
-controls.enableZoom = false; // Enable zooming
-controls.enablePan = false; // Enable panning
+controls.enableZoom = false; // Disable zooming
+controls.enablePan = false; // Disable panning
+
+// Handle window resize
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+});
 
 // Create a loading manager
-let loadingManager = new THREE.LoadingManager();
+const loadingManager = new THREE.LoadingManager();
 
 const progressBar = document.getElementById('progress-bar');
 
 loadingManager.onProgress = function(url, loaded, total) {
-    progressBar.value = (loaded / total) * 100;
+  progressBar.value = (loaded / total) * 100;
 }
 
 const progressBarContainer = document.querySelector('.progress-bar-container');
 
-loadingManager.onLoad = function () {
+loadingManager.onLoad = function() {
   progressBarContainer.style.display = 'none';
   console.log('All assets loaded.');
   animate(); // Start animation loop after assets are loaded
 };
 
-loadingManager.onError = function (url) {
+loadingManager.onError = function(url) {
   console.log('There was an error loading ' + url);
 };
 
 // Load HDR environment map
-new RGBELoader(loadingManager).load('assets/montorfano_4k.hdr', function (texture) {
+new RGBELoader(loadingManager).load('assets/montorfano_4k.hdr', function(texture) {
   texture.mapping = THREE.EquirectangularReflectionMapping;
   scene.background = texture;
   scene.environment = texture;
 });
 
-// Load GLTF model
-let model;
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath('three.js-master/examples/jsm/libs/draco/');
+
 const loader = new GLTFLoader(loadingManager);
-loader.load('assets/livingroom-good-sample.gltf', function (gltf) {
-  model = gltf.scene;
-  
-  // Tag walls and floors in the model
+loader.setDRACOLoader(dracoLoader);
+
+loader.load('assets/livingroom-good-sample.gltf', function(gltf) {
+  const model = gltf.scene;
+
   model.traverse((child) => {
     if (child.isMesh) {
       if (child.name.includes('Plane001')) {
         child.userData.type = 'wall';
-        console.log('Tagged wall:', child.name);
       } else if (child.name.includes('Floor')) {
         child.userData.type = 'floor';
-        console.log('Tagged floor:', child.name);
       }
     }
   });
@@ -97,7 +107,6 @@ function animate() {
 // Raycasting setup
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
-let highlightEdges;
 
 function onMouseClick(event) {
   // Convert mouse position to normalized device coordinates (-1 to +1) for both components.
@@ -154,6 +163,10 @@ function onMouseClick(event) {
 
 // Add event listener for mouse click
 window.addEventListener('click', onMouseClick, false);
+
+const ktx2Loader = new KTX2Loader()
+  .setTranscoderPath('three.js-master/examples/jsm/libs/basis/') // Set the path to Basis transcoder
+  .detectSupport(renderer); // Pass the renderer to detect hardware capabilities
 
 // Function to handle texture change
 function changeTexture(textureUrl, type, repeatX = 1, repeatY = 1) {
@@ -224,11 +237,22 @@ function onMouseMove(event) {
     const intersect = intersects[0];
 
     if (intersect && intersect.object.isMesh) {
-      // Display tooltip
       tooltip.style.display = 'block';
-      tooltip.style.left = `${event.clientX + 10}px`;
-      tooltip.style.top = `${event.clientY + 10}px`;
 
+      let tooltipX = event.clientX + 10;
+      let tooltipY = event.clientY + 10;
+
+      if (tooltipX + tooltip.clientWidth > window.innerWidth) {
+        tooltipX = event.clientX - tooltip.clientWidth - 10;
+      }
+      if (tooltipY + tooltip.clientHeight > window.innerHeight) {
+        tooltipY = event.clientY - tooltip.clientHeight - 10;
+      }
+
+      tooltip.style.left = `${tooltipX}px`;
+      tooltip.style.top = `${tooltipY}px`;
+
+      // Check the type of the intersected object and set the tooltip text
       if (intersect.object.userData.type === 'wall') {
         tooltip.textContent = 'Wall';
       } else if (intersect.object.userData.type === 'floor') {
@@ -248,24 +272,38 @@ window.addEventListener('mousemove', onMouseMove, false);
 // Add event listener for the hide button
 const hideButton = document.getElementById('hide-sidebar');
 hideButton.addEventListener('click', (e) => {
-    const sidebar = document.querySelector('.sidebar');
-    sidebar.style.display = sidebar.style.display === 'none' ? 'block' : 'none';
-     // Stop the click event from propagating
-     e.stopPropagation();
+  const sidebar = document.querySelector('.sidebar');
+  sidebar.style.display = sidebar.style.display === 'none' ? 'block' : 'none';
+  e.stopPropagation(); // Stop the click event from propagating
 });
 
 const hideButton2 = document.getElementById('hide-sidebar2');
 hideButton2.addEventListener('click', (e) => {
-    const instruction = document.querySelector('.instruction');
-    instruction.style.display = instruction.style.display === 'none' ? 'block' : 'none';
-     // Stop the click event from propagating
-     e.stopPropagation();
+  const instruction = document.querySelector('.instruction');
+  instruction.style.display = instruction.style.display === 'none' ? 'block' : 'none';
+  e.stopPropagation(); // Stop the click event from propagating
 });
 
 const hideButton3 = document.getElementById('hide-sidebar3');
 hideButton3.addEventListener('click', (e) => {
-    const instruction2 = document.querySelector('.instruction2');
-    instruction2.style.display = instruction2.style.display === 'none' ? 'block' : 'none';
-     // Stop the click event from propagating
-     e.stopPropagation();
+  const instruction2 = document.querySelector('.instruction2');
+  instruction2.style.display = instruction2.style.display === 'none' ? 'block' : 'none';
+  e.stopPropagation(); // Stop the click event from propagating
 });
+
+// Resource cleanup
+function disposeResources() {
+  scene.traverse((object) => {
+    if (object.isMesh) {
+      object.geometry.dispose();
+      object.material.dispose();
+      if (object.material.map) object.material.map.dispose();
+    }
+  });
+}
+
+// Handle window unload event to clean up resources
+window.addEventListener('beforeunload', disposeResources);
+
+// Initial call to start the animation loop
+animate();
