@@ -22,7 +22,7 @@ camera.position.set(0, 0, 1); // Set camera position (x, y, z)
 
 // Create the renderer
 const renderer = new THREE.WebGLRenderer({
-  antialias: !isMobile(), // Disable antialiasing on mobile devices
+  antialias: false,  // Disable antialiasing for all devices
   canvas: canvas
 });
 renderer.setSize(window.innerWidth, window.innerHeight);
