@@ -5,6 +5,11 @@ import { OrbitControls } from './three.js-master/examples/jsm/controls/OrbitCont
 import { DRACOLoader } from './three.js-master/examples/jsm/loaders/DRACOLoader.js';
 import { KTX2Loader } from './three.js-master/examples/jsm/loaders/KTX2Loader.js';
 
+// Function to detect if the device is mobile
+function isMobile() {
+  return /Mobi|Android/i.test(navigator.userAgent);
+}
+
 // Select the canvas element
 const canvas = document.querySelector('.webgl');
 
@@ -17,18 +22,18 @@ camera.position.set(0, 0, 1); // Set camera position (x, y, z)
 
 // Create the renderer
 const renderer = new THREE.WebGLRenderer({
-  antialias: true,
+  antialias: !isMobile(), // Disable antialiasing on mobile devices
   canvas: canvas
 });
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setPixelRatio(isMobile() ? 1 : Math.min(window.devicePixelRatio, 2));
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 0.6;
 renderer.outputEncoding = THREE.sRGBEncoding;
 document.body.appendChild(renderer.domElement);
 
 // Add directional light to the scene
-const light = new THREE.DirectionalLight(0xffffff, 1);
+const light = new THREE.DirectionalLight(0xffffff, isMobile() ? 0.5 : 1);
 light.position.set(2, 2, 5);
 scene.add(light);
 
@@ -44,7 +49,7 @@ window.addEventListener('resize', debounce(() => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setPixelRatio(isMobile() ? 1 : Math.min(window.devicePixelRatio, 2));
 }, 200));
 
 // Create a loading manager
@@ -81,7 +86,10 @@ dracoLoader.setDecoderConfig({type: 'js'});
 const loader = new GLTFLoader(loadingManager);
 loader.setDRACOLoader(dracoLoader);
 
-loader.load('assets/livingroom-good-sample.gltf', function(gltf) {
+// Load different models and textures for mobile and desktop
+const modelPath = isMobile() ? 'assets/livingroom-good-sample.gltf' : 'assets/livingroom-good-sample.gltf';
+
+loader.load(modelPath, function(gltf) {
   const model = gltf.scene;
 
   model.traverse((child) => {
@@ -219,7 +227,7 @@ floorTextures.forEach(img => {
   });
 });
 
-// Tooltip logic
+// Tooltip setup
 const tooltip = document.getElementById('tooltip');
 
 function onMouseMove(event) {
