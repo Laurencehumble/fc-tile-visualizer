@@ -40,12 +40,12 @@ controls.enableZoom = false; // Disable zooming
 controls.enablePan = false; // Disable panning
 
 // Handle window resize
-window.addEventListener('resize', () => {
+window.addEventListener('resize', debounce(() => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-});
+}, 200));
 
 // Create a loading manager
 const loadingManager = new THREE.LoadingManager();
@@ -76,8 +76,8 @@ new RGBELoader(loadingManager).load('assets/montorfano_4k.hdr', function(texture
 });
 
 const dracoLoader = new DRACOLoader();
-dracoLoader.setDecoderPath('three.js-master/examples/jsm/libs/draco/');
-
+dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
+dracoLoader.setDecoderConfig({type: 'js'});
 const loader = new GLTFLoader(loadingManager);
 loader.setDRACOLoader(dracoLoader);
 
@@ -267,7 +267,7 @@ function onMouseMove(event) {
 }
 
 // Add event listener for mouse move
-window.addEventListener('mousemove', onMouseMove, false);
+window.addEventListener('mousemove', throttle(onMouseMove, 100), false);
 
 // Add event listener for the hide button
 const hideButton = document.getElementById('hide-sidebar');
@@ -307,3 +307,33 @@ window.addEventListener('beforeunload', disposeResources);
 
 // Initial call to start the animation loop
 animate();
+
+// Utility functions for debounce and throttle
+function debounce(func, wait) {
+  let timeout;
+  return function() {
+    const context = this, args = arguments;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(context, args), wait);
+  };
+}
+
+function throttle(func, limit) {
+  let lastFunc;
+  let lastRan;
+  return function() {
+    const context = this, args = arguments;
+    if (!lastRan) {
+      func.apply(context, args);
+      lastRan = Date.now();
+    } else {
+      clearTimeout(lastFunc);
+      lastFunc = setTimeout(function() {
+        if ((Date.now() - lastRan) >= limit) {
+          func.apply(context, args);
+          lastRan = Date.now();
+        }
+      }, limit - (Date.now() - lastRan));
+    }
+  };
+}
