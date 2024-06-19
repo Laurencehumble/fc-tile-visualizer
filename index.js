@@ -32,10 +32,24 @@ renderer.toneMappingExposure = 0.6;
 renderer.outputEncoding = THREE.sRGBEncoding;
 document.body.appendChild(renderer.domElement);
 
-// Add directional light to the scene
-const light = new THREE.DirectionalLight(0xffffff, isMobile() ? 0.5 : 1);
-light.position.set(2, 2, 5);
-scene.add(light);
+const spotLight = new THREE.SpotLight(0xffffff, 50);
+spotLight.position.set(0, 10, 0);
+spotLight.angle = Math.PI / 2;
+spotLight.penumbra = 0;
+spotLight.decay = 1;
+spotLight.distance = 0;
+spotLight.castShadow = true;
+spotLight.shadow.mapSize.width = 1024;
+spotLight.shadow.mapSize.height = 1024;
+spotLight.shadow.camera.near = 1;
+spotLight.shadow.camera.far = 10;
+spotLight.shadow.focus = 1;
+scene.add(spotLight);
+
+const lightHelper = new THREE.SpotLightHelper(spotLight);
+scene.add(lightHelper);
+
+lightHelper.visible = false;
 
 // Add orbit controls
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -87,14 +101,14 @@ const loader = new GLTFLoader(loadingManager);
 loader.setDRACOLoader(dracoLoader);
 
 // Load different models and textures for mobile and desktop
-const modelPath = isMobile() ? 'assets/livingroom-good-sample.gltf' : 'assets/livingroom-good-sample.gltf';
+const modelPath = isMobile() ? 'assets/livingroom-good-sample2.gltf' : 'assets/livingroom-good-sample2.gltf';
 
 loader.load(modelPath, function(gltf) {
   const model = gltf.scene;
 
   model.traverse((child) => {
     if (child.isMesh) {
-      if (child.name.includes('Plane001')) {
+      if (child.name.includes('Wall')) {
         child.userData.type = 'wall';
       } else if (child.name.includes('Floor')) {
         child.userData.type = 'floor';
@@ -130,7 +144,7 @@ function onMouseClick(event) {
   if (intersects.length > 0) {
     const intersect = intersects[0];
 
-    if (intersect && intersect.object.isMesh) {
+    if (intersect && intersect.object.isMesh && (intersect.object.userData.type === 'wall' || intersect.object.userData.type === 'floor')) {
       // Remove any existing highlighted object
       if (window.highlightedObject) {
         window.highlightedObject.material.emissive.setHex(0x000000); // Reset the material of the previously highlighted object
@@ -138,7 +152,7 @@ function onMouseClick(event) {
       }
 
       // Set the material of the clicked object to make it appear highlighted
-      intersect.object.material.emissive.setHex(0xE56262); // Set the emissive color to gold (you can adjust this color)
+      intersect.object.material.emissive.setHex(0xBF1901); // Set the emissive color to gray (you can adjust this color)
 
       // Store the clicked object globally for texture application
       window.clickedObject = intersect.object;
