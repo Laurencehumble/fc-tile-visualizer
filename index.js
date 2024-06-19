@@ -258,7 +258,7 @@ function onMouseMove(event) {
   if (intersects.length > 0) {
     const intersect = intersects[0];
 
-    if (intersect && intersect.object.isMesh) {
+    if (intersect && intersect.object.isMesh && (intersect.object.userData.type === 'wall' || intersect.object.userData.type === 'floor')) {
       tooltip.style.display = 'block';
 
       let tooltipX = event.clientX + 10;
@@ -281,12 +281,13 @@ function onMouseMove(event) {
         tooltip.textContent = 'Floor';
       }
     } else {
-      tooltip.style.display = 'none';
+      tooltip.style.display = 'none'; // Hide the tooltip if not hovering over a wall or floor
     }
   } else {
-    tooltip.style.display = 'none';
+    tooltip.style.display = 'none'; // Hide the tooltip if not intersecting with any object
   }
 }
+
 
 // Add event listener for mouse move
 window.addEventListener('mousemove', throttle(onMouseMove, 100), false);
