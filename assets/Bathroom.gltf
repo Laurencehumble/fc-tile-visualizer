@@ -659,7 +659,7 @@
 				-1,
 				0,
 				0,
-				2.308687953700428e-06
+				2.427897243251209e-06
 			],
 			"translation":[
 				-1.3659999370574951,
@@ -1025,8 +1025,8 @@
 			],
 			"translation":[
 				0,
-				-0.012076212093234062,
-				0.00042736681643873453
+				-0.012076208367943764,
+				0.0004274860257282853
 			]
 		},
 		{
@@ -1415,40 +1415,6 @@
 			},
 			"name":"ceramics",
 			"pbrMetallicRoughness":{}
-		},
-		{
-			"doubleSided":true,
-			"extensions":{
-				"KHR_materials_specular":{
-					"specularFactor":0.75
-				},
-				"KHR_materials_ior":{
-					"ior":1.4500000476837158
-				}
-			},
-			"extras":{
-				"pmc_matprops":{
-					"workflow":"DIELECTRIC",
-					"setname":"WoodFineDark004_3K",
-					"status":"{}",
-					"size":"3K",
-					"use_ao":1,
-					"use_disp":1,
-					"use_sixteenbit":1,
-					"setpath":"D:\\Programs\\Blender\\__My projects\\Artifex\\2019\\Interior\\Bathroom 001\\Details\\..\\..\\..\\..\\..\\Poliigon\\Textures\\Wood\\WoodFineDark004\\3K\\WoodFineDark004_3K"
-				}
-			},
-			"name":"WoodFineDark004_3Kss",
-			"pbrMetallicRoughness":{
-				"baseColorFactor":[
-					0.44800031185150146,
-					0.38319095969200134,
-					0.39495694637298584,
-					1
-				],
-				"metallicFactor":0,
-				"roughnessFactor":0.10000000149011612
-			}
 		},
 		{
 			"doubleSided":true,
@@ -1963,7 +1929,6 @@
 						}
 					},
 					"indices":3,
-					"material":7,
 					"mode":4
 				}
 			]
@@ -1986,7 +1951,7 @@
 						}
 					},
 					"indices":41,
-					"material":8,
+					"material":7,
 					"mode":4
 				}
 			]
@@ -2009,7 +1974,7 @@
 						}
 					},
 					"indices":41,
-					"material":8,
+					"material":7,
 					"mode":4
 				}
 			]
@@ -2055,7 +2020,7 @@
 						}
 					},
 					"indices":49,
-					"material":9,
+					"material":8,
 					"mode":4
 				}
 			]
@@ -2080,7 +2045,7 @@
 						}
 					},
 					"indices":53,
-					"material":10,
+					"material":9,
 					"mode":4
 				},
 				{
@@ -2100,7 +2065,7 @@
 						}
 					},
 					"indices":57,
-					"material":11,
+					"material":10,
 					"mode":4
 				},
 				{
@@ -2140,7 +2105,7 @@
 						}
 					},
 					"indices":65,
-					"material":12,
+					"material":11,
 					"mode":4
 				}
 			]
@@ -2165,7 +2130,7 @@
 						}
 					},
 					"indices":69,
-					"material":13,
+					"material":12,
 					"mode":4
 				}
 			]
@@ -2238,7 +2203,7 @@
 						}
 					},
 					"indices":80,
-					"material":14,
+					"material":13,
 					"mode":4
 				},
 				{
@@ -2256,7 +2221,7 @@
 						}
 					},
 					"indices":83,
-					"material":15,
+					"material":14,
 					"mode":4
 				},
 				{
@@ -2274,7 +2239,7 @@
 						}
 					},
 					"indices":86,
-					"material":16,
+					"material":15,
 					"mode":4
 				}
 			]
@@ -2297,7 +2262,7 @@
 						}
 					},
 					"indices":89,
-					"material":15,
+					"material":14,
 					"mode":4
 				},
 				{
@@ -2315,7 +2280,7 @@
 						}
 					},
 					"indices":92,
-					"material":17,
+					"material":16,
 					"mode":4
 				}
 			]
@@ -2338,7 +2303,7 @@
 						}
 					},
 					"indices":95,
-					"material":15,
+					"material":14,
 					"mode":4
 				}
 			]
@@ -2361,7 +2326,7 @@
 						}
 					},
 					"indices":98,
-					"material":18,
+					"material":17,
 					"mode":4
 				}
 			]
@@ -2384,7 +2349,7 @@
 						}
 					},
 					"indices":101,
-					"material":19,
+					"material":18,
 					"mode":4
 				}
 			]
@@ -2407,7 +2372,7 @@
 						}
 					},
 					"indices":104,
-					"material":15,
+					"material":14,
 					"mode":4
 				}
 			]
@@ -2448,7 +2413,7 @@
 						}
 					},
 					"indices":110,
-					"material":20,
+					"material":19,
 					"mode":4
 				}
 			]
@@ -2471,7 +2436,7 @@
 						}
 					},
 					"indices":113,
-					"material":21,
+					"material":20,
 					"mode":4
 				}
 			]
@@ -2496,7 +2461,7 @@
 						}
 					},
 					"indices":117,
-					"material":21,
+					"material":20,
 					"mode":4
 				},
 				{
@@ -2516,7 +2481,7 @@
 						}
 					},
 					"indices":121,
-					"material":15,
+					"material":14,
 					"mode":4
 				}
 			]
@@ -2597,7 +2562,7 @@
 						}
 					},
 					"indices":130,
-					"material":22,
+					"material":21,
 					"mode":4
 				}
 			]
@@ -2620,7 +2585,7 @@
 						}
 					},
 					"indices":133,
-					"material":23,
+					"material":22,
 					"mode":4
 				},
 				{
@@ -2638,7 +2603,7 @@
 						}
 					},
 					"indices":130,
-					"material":22,
+					"material":21,
 					"mode":4
 				}
 			]
@@ -2661,7 +2626,7 @@
 						}
 					},
 					"indices":133,
-					"material":23,
+					"material":22,
 					"mode":4
 				},
 				{
@@ -2679,7 +2644,7 @@
 						}
 					},
 					"indices":130,
-					"material":22,
+					"material":21,
 					"mode":4
 				}
 			]
@@ -2702,7 +2667,7 @@
 						}
 					},
 					"indices":133,
-					"material":24,
+					"material":23,
 					"mode":4
 				}
 			]
@@ -2727,7 +2692,7 @@
 						}
 					},
 					"indices":145,
-					"material":25,
+					"material":24,
 					"mode":4
 				}
 			]
@@ -2752,7 +2717,7 @@
 						}
 					},
 					"indices":149,
-					"material":25,
+					"material":24,
 					"mode":4
 				}
 			]
@@ -2775,7 +2740,7 @@
 						}
 					},
 					"indices":152,
-					"material":22,
+					"material":21,
 					"mode":4
 				}
 			]
@@ -2798,7 +2763,7 @@
 						}
 					},
 					"indices":155,
-					"material":15,
+					"material":14,
 					"mode":4
 				}
 			]
@@ -2821,7 +2786,7 @@
 						}
 					},
 					"indices":158,
-					"material":15,
+					"material":14,
 					"mode":4
 				}
 			]
@@ -2846,7 +2811,7 @@
 						}
 					},
 					"indices":162,
-					"material":15,
+					"material":14,
 					"mode":4
 				}
 			]
@@ -2869,7 +2834,7 @@
 						}
 					},
 					"indices":165,
-					"material":15,
+					"material":14,
 					"mode":4
 				}
 			]
@@ -2892,7 +2857,7 @@
 						}
 					},
 					"indices":168,
-					"material":26,
+					"material":25,
 					"mode":4
 				},
 				{
@@ -2910,7 +2875,7 @@
 						}
 					},
 					"indices":171,
-					"material":27,
+					"material":26,
 					"mode":4
 				},
 				{
@@ -2928,7 +2893,7 @@
 						}
 					},
 					"indices":174,
-					"material":28,
+					"material":27,
 					"mode":4
 				}
 			]
@@ -2969,7 +2934,7 @@
 						}
 					},
 					"indices":180,
-					"material":29,
+					"material":28,
 					"mode":4
 				}
 			]
@@ -3017,7 +2982,7 @@
 						}
 					},
 					"indices":3,
-					"material":30,
+					"material":29,
 					"mode":4
 				}
 			]
@@ -4968,7 +4933,7 @@
 	"buffers":[
 		{
 			"byteLength":1006436,
-			"uri":"livingroom-good-sample2.bin"
+			"uri":"Bathroom.bin"
 		}
 	]
 }

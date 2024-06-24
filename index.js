@@ -32,24 +32,13 @@ renderer.toneMappingExposure = 0.6;
 renderer.outputEncoding = THREE.sRGBEncoding;
 document.body.appendChild(renderer.domElement);
 
-const spotLight = new THREE.SpotLight(0xffffff, 50);
-spotLight.position.set(0, 10, 0);
-spotLight.angle = Math.PI / 2;
-spotLight.penumbra = 0;
-spotLight.decay = 1;
-spotLight.distance = 0;
-spotLight.castShadow = true;
-spotLight.shadow.mapSize.width = 1024;
-spotLight.shadow.mapSize.height = 1024;
-spotLight.shadow.camera.near = 1;
-spotLight.shadow.camera.far = 10;
-spotLight.shadow.focus = 1;
-scene.add(spotLight);
+// Add lighting
+const ambientLight = new THREE.AmbientLight(0xffffff, 3);
+scene.add(ambientLight);
 
-const lightHelper = new THREE.SpotLightHelper(spotLight);
-scene.add(lightHelper);
-
-lightHelper.visible = false;
+const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
+directionalLight.position.set(0, 1, 0);
+scene.add(directionalLight);
 
 // Add orbit controls
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -101,7 +90,7 @@ const loader = new GLTFLoader(loadingManager);
 loader.setDRACOLoader(dracoLoader);
 
 // Load different models and textures for mobile and desktop
-const modelPath = isMobile() ? 'assets/livingroom-good-sample2.gltf' : 'assets/livingroom-good-sample2.gltf';
+const modelPath = isMobile() ? 'assets/Bathroom.gltf' : 'assets/Bathroom.gltf';
 
 loader.load(modelPath, function(gltf) {
   const model = gltf.scene;
