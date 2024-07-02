@@ -56,24 +56,6 @@
             font-size: 2rem;
         }
 
-        .wall-textures img,
-        .floor-textures img {
-            width: 100%;
-            height: auto;
-            cursor: pointer;
-        }
-
-        .sidebar {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 200px;
-            height: 90%;
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 10px;
-            overflow-y: auto;
-        }
-
         .instruction {
             position: absolute;
             right: 0;
@@ -91,22 +73,48 @@
             background-color: rgba(255, 255, 255, 0.8);
             padding: 10px;
         }
+        .sidebar {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 200px;
+        height: 90%;
+        background-color: rgba(255, 255, 255, 0.95); /* Less transparency */
+        padding: 10px;
+        overflow-y: auto;
+        z-index: 9999; /* Higher z-index to ensure it's above other content */
+        }
 
-        .sidebar img {
-            width: 100%;
+        .sidebar button {
             margin-bottom: 10px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            outline: none;
+        }
+
+        .wall-textures img,
+        .floor-textures img {
+            width: 100%;
+            height: auto;
             cursor: pointer;
         }
 
-        .tooltip {
-            position: absolute;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
+        /* Styles for color and size containers */
+        .color-container,
+        .size-container,
+        .details-container {
+            margin-top: 20px;
+        }
+
+        .color-container select,
+        .size-container select {
+            width: 100%;
             padding: 5px;
-            border-radius: 5px;
-            pointer-events: none;
-            display: none;
-            z-index: 10;
+        }
+
+        .details-container p {
+            margin: 0;
         }
     </style>
 </head>
@@ -146,42 +154,43 @@
     </div>
 
     <div class="sidebar" style="display: none;">
-
         <button id="hide-sidebar">
-        <svg width="16" height="16" viewBox="0 0 32 32" fill="none"
-        xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" clip-rule="evenodd"
-        d="M25.3333 8.54667L23.4533 6.66667L16 14.12L8.54667 6.66667L6.66667 8.54667L14.12 16L6.66667 23.4533L8.54667 25.3333L16 17.88L23.4533 25.3333L25.3333 23.4533L17.88 16L25.3333 8.54667Z"
-        fill="#475569" />
-        </svg>
+            <svg width="16" height="16" viewBox="0 0 32 32" fill="none"
+                 xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M25.3333 8.54667L23.4533 6.66667L16 14.12L8.54667 6.66667L6.66667 8.54667L14.12 16L6.66667 23.4533L8.54667 25.3333L16 17.88L23.4533 25.3333L25.3333 23.4533L17.88 16L25.3333 8.54667Z"
+                      fill="#475569"/>
+            </svg>
         </button>
-
         <div class="wall-textures-container">
             <h3>Wall Textures</h3>
             <div class="wall-textures">
-                <img src="img/wall.jpg" data-texture="img/wall.jpg" alt="Texture 1">
+                <img src="img/wall7.jpg" data-texture="img/wall7.jpg" alt="Texture 1">
                 <img src="img/wall3.jpg" data-texture="img/wall3.jpg" alt="Texture 2">
-                <img src="img/wall4.jpg" data-texture="img/wall4.jpg" alt="Texture 3">
-                <img src="img/wall5.jpg" data-texture="img/wall5.jpg" alt="Texture 4">
-                <img src="img/wall6.jpg" data-texture="img/wall6.jpg" alt="Texture 5">
-                <!-- Add more wall texture images here -->
+                <img src="img/wall20x20.jpg" data-texture="img/wall20x20.jpg" alt="Texture 3">
+                <!-- Wall texture images here -->
             </div>
         </div>
+        <!-- Floor Textures -->
         <div class="floor-textures-container">
             <h3>Floor Textures</h3>
             <div class="floor-textures">
-                <img src="img/floor.jpg" data-texture="img/floor.jpg" alt="Texture 6">
-                <img src="img/floor2.jpg" data-texture="img/floor2.jpg" alt="Texture 7">
-                <img src="img/floor3.jpg" data-texture="img/floor3.jpg" alt="Texture 8">
-                <img src="img/floor4.jpg" data-texture="img/floor4.jpg" alt="Texture 9">
-                <img src="img/floor5.jpg" data-texture="img/floor5.jpg" alt="Texture 10">
-                <!-- Add more floor texture images here -->
+                <img src="img/floor.jpg" data-texture="img/floor.jpg" alt="Texture 5">
+                <img src="img/floor3.jpg" data-texture="img/floor3.jpg" alt="Texture 7">
+                <img src="img/floor4.jpg" data-texture="img/floor4.jpg" alt="Texture 8">
+                <!-- Floor texture images here -->
             </div>
         </div>
-    </div>
-    
 
-    <div class="tooltip" id="tooltip">Tooltip</div>
+        <!-- Example button for size options -->
+        <button id="size-7x45">7x45</button>
+        <button id="size-6.5x20">6.5x20</button>
+        <button id="size-30x60">30x60</button>
+
+    </div>
+        
+    <div id="tooltip" style="display: none; position: absolute; background-color: rgba(255, 255, 255, 0.9); padding: 5px; border-radius: 5px;"></div>
+
     <canvas class="webgl"></canvas>
     <script async type="module" src="index.js"></script>
 </body>

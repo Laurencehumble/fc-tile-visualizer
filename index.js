@@ -33,12 +33,38 @@ renderer.outputEncoding = THREE.sRGBEncoding;
 document.body.appendChild(renderer.domElement);
 
 // Add lighting
-const ambientLight = new THREE.AmbientLight(0xffffff, 3);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5 );
 scene.add(ambientLight);
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
-directionalLight.position.set(0, 1, 0);
-scene.add(directionalLight);
+// Create the DirectionalLight
+const sl = new THREE.DirectionalLight(0xffffff, 3);
+sl.position.set(0, -5, 0); // Position it above the scene
+sl.target.position.set(0, 0, 5); // Point it towards the origin (or the target area)
+
+// Add the target to the scene
+scene.add(sl.target);
+
+// Add a helper to visualize the light's position and direction
+const slHelper = new THREE.DirectionalLightHelper(sl);
+scene.add(sl);
+
+
+// GUI Setup
+// const gui = new GUI();
+// const plSettings = { visible: true, color: pl.color.getHex() };
+// const plFolder = gui.addFolder('Point Light');
+// plFolder.add(plSettings, 'visible').onChange(value => {
+//     pl.visible = value;
+//     plHelper.visible = value;
+// });
+// plFolder.add(pl, 'intensity', 0, 2, 0.25);
+// plFolder.add(pl.position, 'x', -2, 4, 0.5);
+// plFolder.add(pl.position, 'y', -2, 4, 0.5);
+// plFolder.add(pl.position, 'z', -2, 4, 0.5);
+// plFolder.add(pl, 'castShadow');
+// plFolder.addColor(plSettings, 'color').onChange(value => pl.color.set(value));
+// plFolder.open();
+
 
 // Add orbit controls
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -95,18 +121,34 @@ const modelPath = isMobile() ? 'assets/Bathroom.gltf' : 'assets/Bathroom.gltf';
 loader.load(modelPath, function(gltf) {
   const model = gltf.scene;
 
+  // Function to apply default texture with repeat values
+  function applyDefaultTexture(object, textureUrl, repeatX, repeatY) {
+    const textureLoader = new THREE.TextureLoader();
+    const defaultTexture = textureLoader.load(textureUrl);
+    defaultTexture.wrapS = THREE.RepeatWrapping;
+    defaultTexture.wrapT = THREE.RepeatWrapping;
+    defaultTexture.repeat.set(repeatX, repeatY);
+
+    // Assign the default texture to the object's material
+    object.material.map = defaultTexture;
+    object.material.needsUpdate = true;
+  }
+
   model.traverse((child) => {
     if (child.isMesh) {
       if (child.name.includes('Wall')) {
         child.userData.type = 'wall';
+        applyDefaultTexture(child, 'img/wall3.jpg', 6, 10); // Adjust repeat values for walls
       } else if (child.name.includes('Floor')) {
         child.userData.type = 'floor';
+        applyDefaultTexture(child, 'img/wall20x20.jpg', 10, 5); // Adjust repeat values for floors
       }
     }
   });
 
   scene.add(model);
 });
+
 
 // Animation loop
 function animate() {
@@ -202,14 +244,13 @@ const wallTextures = document.querySelectorAll('.wall-textures img');
 wallTextures.forEach(img => {
   img.addEventListener('click', (e) => {
     const textureUrl = e.target.dataset.texture;
-    changeTexture(textureUrl, 'wall', 3, 3);
+    changeTexture(textureUrl, 'wall',6, 10);
 
     // Reset the highlight
     if (window.highlightedObject) {
       window.highlightedObject.material.emissive.setHex(0x000000);
       window.highlightedObject = null;
     }
-     // Stop the click event from propagating
      e.stopPropagation();
   });
 });
@@ -218,15 +259,14 @@ const floorTextures = document.querySelectorAll('.floor-textures img');
 floorTextures.forEach(img => {
   img.addEventListener('click', (e) => {
     const textureUrl = e.target.dataset.texture;
-    changeTexture(textureUrl, 'floor', 3, 3);
+    changeTexture(textureUrl, 'floor', 10, 5);
 
     // Reset the highlight
     if (window.highlightedObject) {
       window.highlightedObject.material.emissive.setHex(0x000000);
       window.highlightedObject = null;
     }
-     // Stop the click event from propagating
-     e.stopPropagation();
+    e.stopPropagation();
   });
 });
 
@@ -276,7 +316,6 @@ function onMouseMove(event) {
     tooltip.style.display = 'none'; // Hide the tooltip if not intersecting with any object
   }
 }
-
 
 // Add event listener for mouse move
 window.addEventListener('mousemove', throttle(onMouseMove, 100), false);
@@ -349,3 +388,114 @@ function throttle(func, limit) {
     }
   };
 }
+
+// Function to create a texture with a border
+function createBorderedTexture(textureUrl, width, height, borderColor = 'black', borderWidth = 10, callback) {
+  const textureLoader = new THREE.TextureLoader();
+
+  textureLoader.load(textureUrl, (texture) => {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+
+    // Set canvas size
+    canvas.width = width + 2 * borderWidth;
+    canvas.height = height + 2 * borderWidth;
+
+    // Draw border
+    context.fillStyle = borderColor;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw the original texture in the center
+    const image = texture.image;
+    context.drawImage(image, borderWidth, borderWidth, width, height);
+
+    // Create new texture from canvas
+    const borderedTexture = new THREE.Texture(canvas);
+    borderedTexture.needsUpdate = true;
+
+    callback(borderedTexture);
+  });
+}
+
+// Function to handle texture size change for walls
+function changeWallTextureSize(size) {
+  if (window.clickedObject && window.clickedObject.userData.type === 'wall') {
+    const textureUrl = window.clickedObject.material.map.image.currentSrc; // Get the current texture URL
+    const [width, height] = size.split('x').map(Number);
+
+    createBorderedTexture(textureUrl, width, height, 'black', 10, (borderedTexture) => {
+      const repeatX = 1 / (width / 150);
+      const repeatY = 1 / (height / 150);
+
+      // Change the repeat values based on the size
+      borderedTexture.repeat.set(repeatX, repeatY);
+      borderedTexture.wrapS = THREE.RepeatWrapping;
+      borderedTexture.wrapT = THREE.RepeatWrapping;
+
+      // Set texture filtering to nearest to avoid blurring when scaled down
+      borderedTexture.magFilter = THREE.NearestFilter;
+      borderedTexture.minFilter = THREE.LinearMipmapLinearFilter;
+
+      // Apply the new texture to the clicked object
+      window.clickedObject.material.map = borderedTexture;
+      window.clickedObject.material.needsUpdate = true;
+    });
+  }
+}
+
+// Function to handle texture size change for floors
+function changeFloorTextureSize(size) {
+  if (window.clickedObject && window.clickedObject.userData.type === 'floor') {
+    const textureUrl = window.clickedObject.material.map.image.currentSrc; // Get the current texture URL
+    const [width, height] = size.split('x').map(Number);
+
+    createBorderedTexture(textureUrl, width, height, 'black', 10, (borderedTexture) => {
+      const repeatX = 1 / (width / 150);
+      const repeatY = 1 / (height / 150);
+
+      // Change the repeat values based on the size
+      borderedTexture.repeat.set(repeatX, repeatY);
+      borderedTexture.wrapS = THREE.RepeatWrapping;
+      borderedTexture.wrapT = THREE.RepeatWrapping;
+
+      // Set texture filtering to nearest to avoid blurring when scaled down
+      borderedTexture.magFilter = THREE.NearestFilter;
+      borderedTexture.minFilter = THREE.LinearMipmapLinearFilter;
+
+      // Apply the new texture to the clicked object
+      window.clickedObject.material.map = borderedTexture;
+      window.clickedObject.material.needsUpdate = true;
+    });
+  }
+}
+
+
+// Understanding repeatX:
+
+// width is the width of the texture you want to apply, typically in pixels.
+// (width / 100) calculates what fraction of the original texture width you want to repeat across the object.
+// 1 / (width / 100) then computes how many times the texture should repeat across the object's width. For example, if width is 200, (width / 100) would be 2, and 1 / (width / 100) would be 0.5, indicating that the texture should repeat half a time across the width.
+
+// Understanding repeatY:
+
+// height similarly represents the height of the texture.
+// (height / 100) calculates what fraction of the original texture height you want to repeat vertically.
+// 1 / (height / 100) determines how many times the texture should repeat vertically. Using the same example, if height is 150, (height / 100) would be 1.5, and 1 / (height / 100) would be approximately 0.67, meaning the texture would repeat about two-thirds of a time vertically.
+
+// Add event listeners for size buttons
+const sizeButtons = document.querySelectorAll('.sidebar button[id^="size-"]');
+sizeButtons.forEach(button => {
+  button.addEventListener('click', (e) => {
+    e.stopPropagation(); // Stop the click event from propagating
+    const size = e.target.id.replace('size-', ''); // Extract size from button id
+    changeWallTextureSize(size);
+    changeFloorTextureSize(size);
+
+    // Reset the highlight
+    if (window.highlightedObject) {
+      window.highlightedObject.material.emissive.setHex(0x000000);
+      window.highlightedObject = null;
+    }
+  });
+});
+
