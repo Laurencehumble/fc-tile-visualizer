@@ -217,9 +217,17 @@ function onMouseClick(event) {
 // Add event listener for mouse click
 window.addEventListener('click', onMouseClick, false);
 
+// Set up KTX2Loader
 const ktx2Loader = new KTX2Loader()
   .setTranscoderPath('three.js-master/examples/jsm/libs/basis/') // Set the path to Basis transcoder
   .detectSupport(renderer); // Pass the renderer to detect hardware capabilities
+
+// Load HDR environment map
+ktx2Loader.load('assets/montorfano_4k.ktx2', function(texture) {
+  texture.mapping = THREE.EquirectangularReflectionMapping;
+  scene.background = texture;
+  scene.environment = texture;
+});
 
 // Function to handle texture change
 function changeTexture(textureUrl, type, repeatX = 1, repeatY = 1) {
