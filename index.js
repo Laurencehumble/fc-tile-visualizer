@@ -389,55 +389,31 @@ function throttle(func, limit) {
   };
 }
 
-// Function to create a texture with a border
-function createBorderedTexture(textureUrl, width, height, borderColor = 'black', borderWidth = 10, callback) {
-  const textureLoader = new THREE.TextureLoader();
-
-  textureLoader.load(textureUrl, (texture) => {
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-
-    // Set canvas size
-    canvas.width = width + 2 * borderWidth;
-    canvas.height = height + 2 * borderWidth;
-
-    // Draw border
-    context.fillStyle = borderColor;
-    context.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Draw the original texture in the center
-    const image = texture.image;
-    context.drawImage(image, borderWidth, borderWidth, width, height);
-
-    // Create new texture from canvas
-    const borderedTexture = new THREE.Texture(canvas);
-    borderedTexture.needsUpdate = true;
-
-    callback(borderedTexture);
-  });
-}
-
 // Function to handle texture size change for walls
 function changeWallTextureSize(size) {
   if (window.clickedObject && window.clickedObject.userData.type === 'wall') {
     const textureUrl = window.clickedObject.material.map.image.currentSrc; // Get the current texture URL
-    const [width, height] = size.split('x').map(Number);
+    const textureLoader = new THREE.TextureLoader();
 
-    createBorderedTexture(textureUrl, width, height, 'black', 10, (borderedTexture) => {
+    // Load the texture again to ensure we're starting fresh
+    textureLoader.load(textureUrl, (texture) => {
+      const [width, height] = size.split('x').map(Number);
+
+      // Calculate repeat values based on the size
       const repeatX = 1 / (width / 150);
       const repeatY = 1 / (height / 150);
 
       // Change the repeat values based on the size
-      borderedTexture.repeat.set(repeatX, repeatY);
-      borderedTexture.wrapS = THREE.RepeatWrapping;
-      borderedTexture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(repeatX, repeatY);
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
 
       // Set texture filtering to nearest to avoid blurring when scaled down
-      borderedTexture.magFilter = THREE.NearestFilter;
-      borderedTexture.minFilter = THREE.LinearMipmapLinearFilter;
+      texture.magFilter = THREE.NearestFilter;
+      texture.minFilter = THREE.LinearMipmapLinearFilter;
 
       // Apply the new texture to the clicked object
-      window.clickedObject.material.map = borderedTexture;
+      window.clickedObject.material.map = texture;
       window.clickedObject.material.needsUpdate = true;
     });
   }
@@ -447,28 +423,31 @@ function changeWallTextureSize(size) {
 function changeFloorTextureSize(size) {
   if (window.clickedObject && window.clickedObject.userData.type === 'floor') {
     const textureUrl = window.clickedObject.material.map.image.currentSrc; // Get the current texture URL
-    const [width, height] = size.split('x').map(Number);
+    const textureLoader = new THREE.TextureLoader();
 
-    createBorderedTexture(textureUrl, width, height, 'black', 10, (borderedTexture) => {
+    // Load the texture again to ensure we're starting fresh
+    textureLoader.load(textureUrl, (texture) => {
+      const [width, height] = size.split('x').map(Number);
+
+      // Calculate repeat values based on the size
       const repeatX = 1 / (width / 150);
       const repeatY = 1 / (height / 150);
 
       // Change the repeat values based on the size
-      borderedTexture.repeat.set(repeatX, repeatY);
-      borderedTexture.wrapS = THREE.RepeatWrapping;
-      borderedTexture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(repeatX, repeatY);
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
 
       // Set texture filtering to nearest to avoid blurring when scaled down
-      borderedTexture.magFilter = THREE.NearestFilter;
-      borderedTexture.minFilter = THREE.LinearMipmapLinearFilter;
+      texture.magFilter = THREE.NearestFilter;
+      texture.minFilter = THREE.LinearMipmapLinearFilter;
 
       // Apply the new texture to the clicked object
-      window.clickedObject.material.map = borderedTexture;
+      window.clickedObject.material.map = texture;
       window.clickedObject.material.needsUpdate = true;
     });
   }
 }
-
 
 // Understanding repeatX:
 
