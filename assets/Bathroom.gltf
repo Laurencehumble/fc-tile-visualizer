@@ -679,7 +679,7 @@
 				-1,
 				0,
 				0,
-				8.269152203865815e-06
+				8.984407941170502e-06
 			],
 			"translation":[
 				-1.3659999370574951,
@@ -1187,28 +1187,8 @@
 		},
 		{
 			"doubleSided":true,
-			"name":"Material floor",
-			"pbrMetallicRoughness":{
-				"baseColorFactor":[
-					0.800000011920929,
-					0.800000011920929,
-					0.800000011920929,
-					1
-				],
-				"metallicFactor":0,
-				"roughnessFactor":0.5
-			}
-		},
-		{
-			"doubleSided":true,
 			"name":"Material wall",
 			"pbrMetallicRoughness":{
-				"baseColorFactor":[
-					0.800000011920929,
-					0.800000011920929,
-					0.800000011920929,
-					1
-				],
 				"metallicFactor":0,
 				"roughnessFactor":0.5
 			}
@@ -1586,7 +1566,6 @@
 						}
 					},
 					"indices":20,
-					"material":2,
 					"mode":4
 				}
 			]
@@ -1611,7 +1590,7 @@
 						}
 					},
 					"indices":24,
-					"material":3,
+					"material":2,
 					"mode":4
 				}
 			]
@@ -1684,7 +1663,7 @@
 						}
 					},
 					"indices":34,
-					"material":4,
+					"material":3,
 					"mode":4
 				}
 			]
@@ -1707,7 +1686,7 @@
 						}
 					},
 					"indices":37,
-					"material":5,
+					"material":4,
 					"mode":4
 				}
 			]
@@ -1730,7 +1709,7 @@
 						}
 					},
 					"indices":37,
-					"material":5,
+					"material":4,
 					"mode":4
 				}
 			]
@@ -1776,7 +1755,7 @@
 						}
 					},
 					"indices":45,
-					"material":6,
+					"material":5,
 					"mode":4
 				}
 			]
@@ -1801,7 +1780,7 @@
 						}
 					},
 					"indices":49,
-					"material":7,
+					"material":6,
 					"mode":4
 				},
 				{
@@ -1821,7 +1800,7 @@
 						}
 					},
 					"indices":53,
-					"material":8,
+					"material":7,
 					"mode":4
 				},
 				{
@@ -1861,7 +1840,7 @@
 						}
 					},
 					"indices":61,
-					"material":9,
+					"material":8,
 					"mode":4
 				}
 			]
@@ -1934,7 +1913,7 @@
 						}
 					},
 					"indices":72,
-					"material":10,
+					"material":9,
 					"mode":4
 				},
 				{
@@ -1952,7 +1931,7 @@
 						}
 					},
 					"indices":75,
-					"material":11,
+					"material":10,
 					"mode":4
 				},
 				{
@@ -1970,7 +1949,7 @@
 						}
 					},
 					"indices":78,
-					"material":12,
+					"material":11,
 					"mode":4
 				}
 			]
@@ -1993,7 +1972,7 @@
 						}
 					},
 					"indices":81,
-					"material":11,
+					"material":10,
 					"mode":4
 				},
 				{
@@ -2011,7 +1990,7 @@
 						}
 					},
 					"indices":84,
-					"material":13,
+					"material":12,
 					"mode":4
 				}
 			]
@@ -2034,7 +2013,7 @@
 						}
 					},
 					"indices":87,
-					"material":11,
+					"material":10,
 					"mode":4
 				}
 			]
@@ -2057,7 +2036,7 @@
 						}
 					},
 					"indices":90,
-					"material":14,
+					"material":13,
 					"mode":4
 				}
 			]
@@ -2080,7 +2059,7 @@
 						}
 					},
 					"indices":93,
-					"material":15,
+					"material":14,
 					"mode":4
 				}
 			]
@@ -2103,7 +2082,7 @@
 						}
 					},
 					"indices":96,
-					"material":11,
+					"material":10,
 					"mode":4
 				}
 			]
@@ -2126,7 +2105,7 @@
 						}
 					},
 					"indices":99,
-					"material":16,
+					"material":15,
 					"mode":4
 				},
 				{
@@ -2144,7 +2123,7 @@
 						}
 					},
 					"indices":102,
-					"material":4,
+					"material":3,
 					"mode":4
 				}
 			]
@@ -2225,7 +2204,7 @@
 						}
 					},
 					"indices":111,
-					"material":17,
+					"material":16,
 					"mode":4
 				}
 			]
@@ -2248,7 +2227,7 @@
 						}
 					},
 					"indices":114,
-					"material":18,
+					"material":17,
 					"mode":4
 				},
 				{
@@ -2266,7 +2245,7 @@
 						}
 					},
 					"indices":111,
-					"material":17,
+					"material":16,
 					"mode":4
 				}
 			]
@@ -2289,7 +2268,7 @@
 						}
 					},
 					"indices":114,
-					"material":18,
+					"material":17,
 					"mode":4
 				},
 				{
@@ -2307,7 +2286,7 @@
 						}
 					},
 					"indices":111,
-					"material":17,
+					"material":16,
 					"mode":4
 				}
 			]
@@ -2330,7 +2309,7 @@
 						}
 					},
 					"indices":114,
-					"material":19,
+					"material":18,
 					"mode":4
 				}
 			]
@@ -2355,7 +2334,7 @@
 						}
 					},
 					"indices":126,
-					"material":20,
+					"material":19,
 					"mode":4
 				}
 			]
@@ -2380,7 +2359,7 @@
 						}
 					},
 					"indices":130,
-					"material":20,
+					"material":19,
 					"mode":4
 				}
 			]
@@ -2403,7 +2382,7 @@
 						}
 					},
 					"indices":133,
-					"material":17,
+					"material":16,
 					"mode":4
 				}
 			]
@@ -2428,7 +2407,7 @@
 						}
 					},
 					"indices":137,
-					"material":11,
+					"material":10,
 					"mode":4
 				}
 			]
@@ -2451,7 +2430,7 @@
 						}
 					},
 					"indices":140,
-					"material":11,
+					"material":10,
 					"mode":4
 				}
 			]
@@ -2474,7 +2453,7 @@
 						}
 					},
 					"indices":143,
-					"material":21,
+					"material":20,
 					"mode":4
 				},
 				{
@@ -2492,7 +2471,7 @@
 						}
 					},
 					"indices":146,
-					"material":22,
+					"material":21,
 					"mode":4
 				},
 				{
@@ -2510,7 +2489,7 @@
 						}
 					},
 					"indices":149,
-					"material":15,
+					"material":14,
 					"mode":4
 				}
 			]
@@ -2558,7 +2537,7 @@
 						}
 					},
 					"indices":20,
-					"material":23,
+					"material":22,
 					"mode":4
 				}
 			]

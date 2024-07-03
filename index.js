@@ -28,12 +28,12 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(isMobile() ? 1 : Math.min(window.devicePixelRatio, 2));
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 0.6;
+renderer.toneMappingExposure = 0.3;
 renderer.outputEncoding = THREE.sRGBEncoding;
 document.body.appendChild(renderer.domElement);
 
 // Add lighting
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.5 );
+const ambientLight = new THREE.AmbientLight(0xffffff, 1 );
 scene.add(ambientLight);
 
 // Create the DirectionalLight
@@ -138,17 +138,16 @@ loader.load(modelPath, function(gltf) {
     if (child.isMesh) {
       if (child.name.includes('Wall')) {
         child.userData.type = 'wall';
-        applyDefaultTexture(child, 'img/wall3.jpg', 6, 10); // Adjust repeat values for walls
+        applyDefaultTexture(child, 'img/wall1.jpg', 6, 10); // Adjust repeat values for walls
       } else if (child.name.includes('Floor')) {
         child.userData.type = 'floor';
-        applyDefaultTexture(child, 'img/wall20x20.jpg', 10, 5); // Adjust repeat values for floors
+        applyDefaultTexture(child, 'img/floor1.jpg', 10, 5); // Adjust repeat values for floors
       }
     }
   });
 
   scene.add(model);
 });
-
 
 // Animation loop
 function animate() {
@@ -408,11 +407,16 @@ function changeWallTextureSize(size) {
       const [width, height] = size.split('x').map(Number);
 
       // Calculate repeat values based on the size
-      const repeatX = 1 / (width / 150);
-      const repeatY = 1 / (height / 150);
+      const repeatX = 1 / (width / 200);
+      const repeatY = 1 / (height / 350);
 
-      // Change the repeat values based on the size
+      // Calculate offset for grout effect (adjust as needed)
+      const offsetX = 1; // Example offset for grout
+      const offsetY = 1; // Example offset for grout
+
+      // Set repeat and offset values
       texture.repeat.set(repeatX, repeatY);
+      texture.offset.set(offsetX, offsetY);
       texture.wrapS = THREE.RepeatWrapping;
       texture.wrapT = THREE.RepeatWrapping;
 
@@ -438,11 +442,16 @@ function changeFloorTextureSize(size) {
       const [width, height] = size.split('x').map(Number);
 
       // Calculate repeat values based on the size
-      const repeatX = 1 / (width / 150);
-      const repeatY = 1 / (height / 150);
+      const repeatX = 1 / (width / 350);
+      const repeatY = 1 / (height / 200);
 
-      // Change the repeat values based on the size
+      // Calculate offset for grout effect (adjust as needed)
+      const offsetX = 1; // Example offset for grout
+      const offsetY = 1; // Example offset for grout
+
+      // Set repeat and offset values
       texture.repeat.set(repeatX, repeatY);
+      texture.offset.set(offsetX, offsetY);
       texture.wrapS = THREE.RepeatWrapping;
       texture.wrapT = THREE.RepeatWrapping;
 
@@ -457,17 +466,6 @@ function changeFloorTextureSize(size) {
   }
 }
 
-// Understanding repeatX:
-
-// width is the width of the texture you want to apply, typically in pixels.
-// (width / 100) calculates what fraction of the original texture width you want to repeat across the object.
-// 1 / (width / 100) then computes how many times the texture should repeat across the object's width. For example, if width is 200, (width / 100) would be 2, and 1 / (width / 100) would be 0.5, indicating that the texture should repeat half a time across the width.
-
-// Understanding repeatY:
-
-// height similarly represents the height of the texture.
-// (height / 100) calculates what fraction of the original texture height you want to repeat vertically.
-// 1 / (height / 100) determines how many times the texture should repeat vertically. Using the same example, if height is 150, (height / 100) would be 1.5, and 1 / (height / 100) would be approximately 0.67, meaning the texture would repeat about two-thirds of a time vertically.
 
 // Add event listeners for size buttons
 const sizeButtons = document.querySelectorAll('.sidebar button[id^="size-"]');
@@ -475,8 +473,14 @@ sizeButtons.forEach(button => {
   button.addEventListener('click', (e) => {
     e.stopPropagation(); // Stop the click event from propagating
     const size = e.target.id.replace('size-', ''); // Extract size from button id
-    changeWallTextureSize(size);
-    changeFloorTextureSize(size);
+
+    if (window.clickedObject) {
+      if (window.clickedObject.userData.type === 'wall') {
+        changeWallTextureSize(size);
+      } else if (window.clickedObject.userData.type === 'floor') {
+        changeFloorTextureSize(size);
+      }
+    }
 
     // Reset the highlight
     if (window.highlightedObject) {
@@ -485,4 +489,3 @@ sizeButtons.forEach(button => {
     }
   });
 });
-

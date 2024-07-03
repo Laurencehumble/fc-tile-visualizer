@@ -116,6 +116,21 @@
         .details-container p {
             margin: 0;
         }
+
+        /* Additional styling for size buttons */
+        .size-buttons {
+            display: flex;
+            gap: 5px;
+            margin-top: 5px;
+        }
+
+        .size-buttons button {
+            background-color: #E56262;
+            color: white;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -165,9 +180,36 @@
         <div class="wall-textures-container">
             <h3>Wall Textures</h3>
             <div class="wall-textures">
-                <img src="img/wall7.jpg" data-texture="img/wall7.jpg" alt="Texture 1">
+                <img src="img/wall2.jpeg" data-texture="img/wall2.jpeg" alt="Texture 1">
+                <div class="size-buttons">
+                    <button id="size-60x60" data-size="60x60">60x60</button>
+                    <button id="size-20x20" data-size="20x20">20x20</button>
+                    <button id="size-30x30" data-size="30x30">30x30</button>
+                </div>
                 <img src="img/wall3.jpg" data-texture="img/wall3.jpg" alt="Texture 2">
-                <img src="img/wall20x20.jpg" data-texture="img/wall20x20.jpg" alt="Texture 3">
+                <div class="size-buttons">
+                    <button id="size-60x60" data-size="60x60">60x60</button>
+                    <button id="size-20x20" data-size="20x20">20x20</button>
+                    <button id="size-30x30" data-size="30x30">30x30</button>
+                </div>
+                <img src="img/wall4.jpg" data-texture="img/wall4.jpg" alt="Texture 3">
+                <div class="size-buttons">
+                    <button id="size-60x60" data-size="60x60">60x60</button>
+                    <button id="size-20x20" data-size="20x20">20x20</button>
+                    <button id="size-30x30" data-size="30x30">30x30</button>
+                </div>
+                <img src="img/wall5.jpg" data-texture="img/wall5.jpg" alt="Texture 3">
+                <div class="size-buttons">
+                    <button id="size-60x60" data-size="60x60">60x60</button>
+                    <button id="size-20x20" data-size="20x20">20x20</button>
+                    <button id="size-30x30" data-size="30x30">30x30</button>
+                </div>
+                <img src="img/wall6.jpg" data-texture="img/wall6.jpg" alt="Texture 3">
+                <div class="size-buttons">
+                    <button id="size-60x60" data-size="60x60">60x60</button>
+                    <button id="size-20x20" data-size="20x20">20x20</button>
+                    <button id="size-30x30" data-size="30x30">30x30</button>
+                </div>
                 <!-- Wall texture images here -->
             </div>
         </div>
@@ -175,18 +217,39 @@
         <div class="floor-textures-container">
             <h3>Floor Textures</h3>
             <div class="floor-textures">
-                <img src="img/floor.jpg" data-texture="img/floor.jpg" alt="Texture 5">
-                <img src="img/floor3.jpg" data-texture="img/floor3.jpg" alt="Texture 7">
-                <img src="img/floor4.jpg" data-texture="img/floor4.jpg" alt="Texture 8">
+                <img src="img/floor2.jpg" data-texture="img/floor2.jpg" alt="Texture 4">
+                <div class="size-buttons">
+                    <button id="size-60x60" data-size="60x60">60x60</button>
+                    <button id="size-20x20" data-size="20x20">20x20</button>
+                    <button id="size-30x30" data-size="30x30">30x30</button>
+                </div>
+                <img src="img/floor3.jpeg" data-texture="img/floor3.jpeg" alt="Texture 5">
+                <div class="size-buttons">
+                    <button id="size-60x60" data-size="60x60">60x60</button>
+                    <button id="size-20x20" data-size="20x20">20x20</button>
+                    <button id="size-30x30" data-size="30x30">30x30</button>
+                </div>
+                <img src="img/floor4.jpg" data-texture="img/floor4.jpg" alt="Texture 6">
+                <div class="size-buttons">
+                    <button id="size-60x60" data-size="60x60">60x60</button>
+                    <button id="size-20x20" data-size="20x20">20x20</button>
+                    <button id="size-30x30" data-size="30x30">30x30</button>
+                </div>
+                <img src="img/floor5.jpeg" data-texture="img/floor5.jpeg" alt="Texture 6">
+                <div class="size-buttons">
+                    <button id="size-60x60" data-size="60x60">60x60</button>
+                    <button id="size-20x20" data-size="20x20">20x20</button>
+                    <button id="size-30x30" data-size="30x30">30x30</button>
+                </div>
+                <img src="img/floor6.jpg" data-texture="img/floor6.jpg" alt="Texture 6">
+                <div class="size-buttons">
+                    <button id="size-60x60" data-size="60x60">60x60</button>
+                    <button id="size-20x20" data-size="20x20">20x20</button>
+                    <button id="size-30x30" data-size="30x30">30x30</button>
+                </div>
                 <!-- Floor texture images here -->
             </div>
         </div>
-
-        <!-- Example button for size options -->
-        <button id="size-7x45">7x45</button>
-        <button id="size-6.5x20">6.5x20</button>
-        <button id="size-30x60">30x60</button>
-
     </div>
         
     <div id="tooltip" style="display: none; position: absolute; background-color: rgba(255, 255, 255, 0.9); padding: 5px; border-radius: 5px;"></div>
