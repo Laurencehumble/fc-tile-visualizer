@@ -132,7 +132,7 @@ function applyDefaultTexture(object, textureUrl, repeatX, repeatY) {
     
     // Draw a black border around the texture
     context.strokeStyle = '#ffffff'; // Black color
-    context.lineWidth = 1;
+    context.lineWidth = 2;
     context.strokeRect(0, 0, canvas.width, canvas.height);
     
     // Create a new texture from the canvas
@@ -251,7 +251,7 @@ ktx2Loader.load('assets/montorfano_4k.ktx2', function(texture) {
 });
 
 // Function to handle texture change
-function changeTexture(textureUrl, type, repeatX, repeatY) {
+function changeTexture(textureUrl, type, repeatX = 1, repeatY = 1) {
   const textureLoader = new THREE.TextureLoader();
 
   // Load the texture
@@ -267,7 +267,7 @@ function changeTexture(textureUrl, type, repeatX, repeatY) {
 
     // Add a black border
     context.strokeStyle = '#ffffff';
-    context.lineWidth = 1;
+    context.lineWidth = 2;
     context.strokeRect(0, 0, canvas.width, canvas.height);
 
     // Create a new texture from the canvas
@@ -512,5 +512,4 @@ sizeButtons.forEach(button => {
         }
     });
 });
-
 
