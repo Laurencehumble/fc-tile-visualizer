@@ -116,23 +116,45 @@ const loader = new GLTFLoader(loadingManager);
 loader.setDRACOLoader(dracoLoader);
 
 // Load different models and textures for mobile and desktop
+function applyDefaultTexture(object, textureUrl, repeatX, repeatY) {
+  const textureLoader = new THREE.TextureLoader();
+  const defaultTexture = textureLoader.load(textureUrl, () => {
+    // Once the texture is loaded, create a canvas for the border effect
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    
+    // Set canvas size based on texture size
+    canvas.width = defaultTexture.image.width;
+    canvas.height = defaultTexture.image.height;
+    
+    // Draw the original texture on the canvas
+    context.drawImage(defaultTexture.image, 0, 0, canvas.width, canvas.height);
+    
+    // Draw a black border around the texture
+    context.strokeStyle = '#ffffff'; // Black color
+    context.lineWidth = 1;
+    context.strokeRect(0, 0, canvas.width, canvas.height);
+    
+    // Create a new texture from the canvas
+    const borderedTexture = new THREE.CanvasTexture(canvas);
+    borderedTexture.wrapS = THREE.RepeatWrapping;
+    borderedTexture.wrapT = THREE.RepeatWrapping;
+    borderedTexture.repeat.set(repeatX, repeatY);
+    
+    // Assign the bordered texture to the object's material
+    object.material.map = borderedTexture;
+    object.material.needsUpdate = true;
+  });
+
+  defaultTexture.wrapS = THREE.RepeatWrapping;
+  defaultTexture.wrapT = THREE.RepeatWrapping;
+  defaultTexture.repeat.set(repeatX, repeatY);
+}
+
 const modelPath = isMobile() ? 'assets/Bathroom.gltf' : 'assets/Bathroom.gltf';
 
 loader.load(modelPath, function(gltf) {
   const model = gltf.scene;
-
-  // Function to apply default texture with repeat values
-  function applyDefaultTexture(object, textureUrl, repeatX, repeatY) {
-    const textureLoader = new THREE.TextureLoader();
-    const defaultTexture = textureLoader.load(textureUrl);
-    defaultTexture.wrapS = THREE.RepeatWrapping;
-    defaultTexture.wrapT = THREE.RepeatWrapping;
-    defaultTexture.repeat.set(repeatX, repeatY);
-
-    // Assign the default texture to the object's material
-    object.material.map = defaultTexture;
-    object.material.needsUpdate = true;
-  }
 
   model.traverse((child) => {
     if (child.isMesh) {
@@ -229,21 +251,41 @@ ktx2Loader.load('assets/montorfano_4k.ktx2', function(texture) {
 });
 
 // Function to handle texture change
-function changeTexture(textureUrl, type, repeatX = 1, repeatY = 1) {
+function changeTexture(textureUrl, type, repeatX, repeatY) {
   const textureLoader = new THREE.TextureLoader();
-  const newTexture = textureLoader.load(textureUrl);
+
+  // Load the texture
+  const newTexture = textureLoader.load(textureUrl, (loadedTexture) => {
+    // Create a canvas for the bordered effect
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    canvas.width = loadedTexture.image.width;
+    canvas.height = loadedTexture.image.height;
+
+    // Draw the texture on the canvas
+    context.drawImage(loadedTexture.image, 0, 0, canvas.width, canvas.height);
+
+    // Add a black border
+    context.strokeStyle = '#ffffff';
+    context.lineWidth = 1;
+    context.strokeRect(0, 0, canvas.width, canvas.height);
+
+    // Create a new texture from the canvas
+    const borderedTexture = new THREE.CanvasTexture(canvas);
+    borderedTexture.wrapS = THREE.RepeatWrapping;
+    borderedTexture.wrapT = THREE.RepeatWrapping;
+    borderedTexture.repeat.set(repeatX, repeatY);
+
+    // Apply the new texture to the clicked object only if the type matches
+    if (window.clickedObject && window.clickedObject.userData.type === type) {
+      window.clickedObject.material.map = borderedTexture;
+      window.clickedObject.material.needsUpdate = true;
+    }
+  });
+
   newTexture.wrapS = THREE.RepeatWrapping;
   newTexture.wrapT = THREE.RepeatWrapping;
   newTexture.repeat.set(repeatX, repeatY);
-
-  // Apply the new texture to the clicked object only if the type matches
-  if (window.clickedObject && window.clickedObject.userData.type === type) {
-    console.log('Changing texture of:', window.clickedObject.name, 'to', textureUrl);
-    window.clickedObject.material.map = newTexture;
-    window.clickedObject.material.needsUpdate = true;
-  } else {
-    console.log('Texture type mismatch:', window.clickedObject ? window.clickedObject.userData.type : 'No object clicked', type);
-  }
 }
 
 // Add event listeners for sidebar images
@@ -251,14 +293,14 @@ const wallTextures = document.querySelectorAll('.wall-textures img');
 wallTextures.forEach(img => {
   img.addEventListener('click', (e) => {
     const textureUrl = e.target.dataset.texture;
-    changeTexture(textureUrl, 'wall',6, 10);
+    changeTexture(textureUrl, 'wall', 6, 10);
 
     // Reset the highlight
     if (window.highlightedObject) {
       window.highlightedObject.material.emissive.setHex(0x000000);
       window.highlightedObject = null;
     }
-     e.stopPropagation();
+    e.stopPropagation();
   });
 });
 
@@ -397,95 +439,78 @@ function throttle(func, limit) {
 }
 
 // Function to handle texture size change for walls
+// Function to handle texture size change for walls
 function changeWallTextureSize(size) {
   if (window.clickedObject && window.clickedObject.userData.type === 'wall') {
-    const textureUrl = window.clickedObject.material.map.image.currentSrc; // Get the current texture URL
-    const textureLoader = new THREE.TextureLoader();
+    const texture = window.clickedObject.material.map.clone(); // Clone the current texture to start fresh
+    const [width, height] = size.split('x').map(Number);
 
-    // Load the texture again to ensure we're starting fresh
-    textureLoader.load(textureUrl, (texture) => {
-      const [width, height] = size.split('x').map(Number);
+    // Calculate repeat values based on the size
+    const repeatX = 1 / (width / 200);
+    const repeatY = 1 / (height / 350);
 
-      // Calculate repeat values based on the size
-      const repeatX = 1 / (width / 200);
-      const repeatY = 1 / (height / 350);
+    // Set repeat and offset values
+    texture.repeat.set(repeatX, repeatY);
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
 
-      // Calculate offset for grout effect (adjust as needed)
-      const offsetX = 1; // Example offset for grout
-      const offsetY = 1; // Example offset for grout
+    // Set texture filtering to nearest to avoid blurring when scaled down
+    texture.magFilter = THREE.NearestFilter;
+    texture.minFilter = THREE.LinearMipmapLinearFilter;
 
-      // Set repeat and offset values
-      texture.repeat.set(repeatX, repeatY);
-      texture.offset.set(offsetX, offsetY);
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
-
-      // Set texture filtering to nearest to avoid blurring when scaled down
-      texture.magFilter = THREE.NearestFilter;
-      texture.minFilter = THREE.LinearMipmapLinearFilter;
-
-      // Apply the new texture to the clicked object
-      window.clickedObject.material.map = texture;
-      window.clickedObject.material.needsUpdate = true;
-    });
+    // Apply the new texture to the clicked object
+    window.clickedObject.material.map = texture;
+    window.clickedObject.material.needsUpdate = true;
   }
 }
 
 // Function to handle texture size change for floors
 function changeFloorTextureSize(size) {
   if (window.clickedObject && window.clickedObject.userData.type === 'floor') {
-    const textureUrl = window.clickedObject.material.map.image.currentSrc; // Get the current texture URL
-    const textureLoader = new THREE.TextureLoader();
+    const texture = window.clickedObject.material.map.clone(); // Clone the current texture to start fresh
+    const [width, height] = size.split('x').map(Number);
 
-    // Load the texture again to ensure we're starting fresh
-    textureLoader.load(textureUrl, (texture) => {
-      const [width, height] = size.split('x').map(Number);
+    // Calculate repeat values based on the size
+    const repeatX = 1 / (width / 350);
+    const repeatY = 1 / (height / 200);
 
-      // Calculate repeat values based on the size
-      const repeatX = 1 / (width / 350);
-      const repeatY = 1 / (height / 200);
+    // Set repeat and offset values
+    texture.repeat.set(repeatX, repeatY);
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
 
-      // Calculate offset for grout effect (adjust as needed)
-      const offsetX = 1; // Example offset for grout
-      const offsetY = 1; // Example offset for grout
+    // Set texture filtering to nearest to avoid blurring when scaled down
+    texture.magFilter = THREE.NearestFilter;
+    texture.minFilter = THREE.LinearMipmapLinearFilter;
 
-      // Set repeat and offset values
-      texture.repeat.set(repeatX, repeatY);
-      texture.offset.set(offsetX, offsetY);
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
-
-      // Set texture filtering to nearest to avoid blurring when scaled down
-      texture.magFilter = THREE.NearestFilter;
-      texture.minFilter = THREE.LinearMipmapLinearFilter;
-
-      // Apply the new texture to the clicked object
-      window.clickedObject.material.map = texture;
-      window.clickedObject.material.needsUpdate = true;
-    });
+    // Apply the new texture to the clicked object
+    window.clickedObject.material.map = texture;
+    window.clickedObject.material.needsUpdate = true;
   }
 }
 
-
-// Add event listeners for size buttons
-const sizeButtons = document.querySelectorAll('.sidebar button[id^="size-"]');
+// Event listener for size buttons
+const sizeButtons = document.querySelectorAll('.size-buttons button');
 sizeButtons.forEach(button => {
-  button.addEventListener('click', (e) => {
-    e.stopPropagation(); // Stop the click event from propagating
-    const size = e.target.id.replace('size-', ''); // Extract size from button id
+    button.addEventListener('click', (e) => {
+        e.stopPropagation(); // Stop the click event from propagating
+        const size = e.target.dataset.size; // Get size from data-size attribute
 
-    if (window.clickedObject) {
-      if (window.clickedObject.userData.type === 'wall') {
-        changeWallTextureSize(size);
-      } else if (window.clickedObject.userData.type === 'floor') {
-        changeFloorTextureSize(size);
-      }
-    }
+        // Check if a clickedObject exists and its type (wall or floor)
+        if (window.clickedObject) {
+            if (window.clickedObject.userData.type === 'wall') {
+                changeWallTextureSize(size); // Call function to change wall texture size
+            } else if (window.clickedObject.userData.type === 'floor') {
+                changeFloorTextureSize(size); // Call function to change floor texture size
+            }
+        }
 
-    // Reset the highlight
-    if (window.highlightedObject) {
-      window.highlightedObject.material.emissive.setHex(0x000000);
-      window.highlightedObject = null;
-    }
-  });
+        // Reset the highlight
+        if (window.highlightedObject) {
+            window.highlightedObject.material.emissive.setHex(0x000000);
+            window.highlightedObject = null;
+        }
+    });
 });
+
+
