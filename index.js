@@ -513,3 +513,27 @@ sizeButtons.forEach(button => {
     });
 });
 
+// Add event listeners for texture items in the sidebar
+const textureItems = document.querySelectorAll('.texture-item');
+
+textureItems.forEach(item => {
+    const img = item.querySelector('img');
+    const sizeButtons = item.querySelector('.size-buttons');
+    const description = item.querySelector('.texture-description');
+
+    // Toggle size buttons and description on image click
+    img.addEventListener('click', () => {
+        sizeButtons.classList.toggle('active'); // Toggle visibility
+        description.classList.toggle('active'); // Toggle visibility
+    });
+
+    // Optionally, you can add logic to select a size and apply it to the scene
+    const sizeButtonsList = sizeButtons.querySelectorAll('button');
+
+    sizeButtonsList.forEach(button => {
+        button.addEventListener('click', () => {
+            const size = button.dataset.size;
+            applyTextureSize(size); // Implement this function to apply texture size
+        });
+    });
+});
