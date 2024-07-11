@@ -36,27 +36,28 @@ document.body.appendChild(renderer.domElement);
 const ambientLight = new THREE.AmbientLight(0xffffff, 3);
 scene.add(ambientLight);
 
-// Create the DirectionalLight
-const dl = new THREE.DirectionalLight(0xffffff, 3);
-dl.position.set(0, 5, -15); // Position it above the scene
-dl.target.position.set(0, 0, 0); // Point it towards the origin (or the target area)
+// Create the first DirectionalLight
+const dl = new THREE.DirectionalLight(0xFFE5CD, 3);
+dl.castShadow = true;
+dl.position.set(0, 8, -10); // Position it above the scene
+dl.target.position.set(0, -5, 0); // Point it towards the origin (or the target area)
 scene.add(dl);
 scene.add(dl.target);
 
-// Create the SpotLight
-const sl = new THREE.SpotLight(0xffffff, 1); // Correct constructor
-sl.position.set(0, 4, 0); // Position it above the scene
-sl.target.position.set(0, 0, 0); // Point it towards the origin (or the target area)
-scene.add(sl);
-scene.add(sl.target);
+// Create the second DirectionalLight
+const pl = new THREE.DirectionalLight(0xFFF0CE, 3); 
+pl.castShadow = true;
+pl.position.set(0, 3.5, 0); // Position it above the scene
+pl.target.position.set(0, 0, 0); // Point it towards the origin (or the target area)
+scene.add(pl);
+scene.add(pl.target);
 
-// Add a helper to visualize the SpotLight's position and direction
-const slHelper = new THREE.SpotLightHelper(sl);
-scene.add();
-
-// Optionally, you can add a helper to visualize the DirectionalLight's position and direction
+// Add helpers for visualization
 const dlHelper = new THREE.DirectionalLightHelper(dl);
-scene.add();
+scene.add(dl);
+
+const plHelper = new THREE.DirectionalLightHelper(pl);
+scene.add(pl);
 
 // GUI Setup
 // const gui = new GUI();
@@ -550,4 +551,3 @@ textureItems.forEach(item => {
         });
     });
 });
-
