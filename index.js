@@ -32,22 +32,31 @@ renderer.toneMappingExposure = 0.3;
 renderer.outputEncoding = THREE.sRGBEncoding;
 document.body.appendChild(renderer.domElement);
 
-// Add lighting
-const ambientLight = new THREE.AmbientLight(0xffffff, 1 );
+// Add ambient light
+const ambientLight = new THREE.AmbientLight(0xffffff, 3);
 scene.add(ambientLight);
 
 // Create the DirectionalLight
-const sl = new THREE.DirectionalLight(0xffffff, 3);
-sl.position.set(0, -5, 0); // Position it above the scene
-sl.target.position.set(0, 0, 5); // Point it towards the origin (or the target area)
+const dl = new THREE.DirectionalLight(0xffffff, 3);
+dl.position.set(0, 5, -15); // Position it above the scene
+dl.target.position.set(0, 0, 0); // Point it towards the origin (or the target area)
+scene.add(dl);
+scene.add(dl.target);
 
-// Add the target to the scene
+// Create the SpotLight
+const sl = new THREE.SpotLight(0xffffff, 1); // Correct constructor
+sl.position.set(0, 4, 0); // Position it above the scene
+sl.target.position.set(0, 0, 0); // Point it towards the origin (or the target area)
+scene.add(sl);
 scene.add(sl.target);
 
-// Add a helper to visualize the light's position and direction
-const slHelper = new THREE.DirectionalLightHelper(sl);
-scene.add(sl);
+// Add a helper to visualize the SpotLight's position and direction
+const slHelper = new THREE.SpotLightHelper(sl);
+scene.add();
 
+// Optionally, you can add a helper to visualize the DirectionalLight's position and direction
+const dlHelper = new THREE.DirectionalLightHelper(dl);
+scene.add();
 
 // GUI Setup
 // const gui = new GUI();
@@ -70,8 +79,8 @@ scene.add(sl);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true; // Enable smooth motion
 controls.dampingFactor = 0.2; // Damping inertia
-controls.enableZoom = false; // Disable zooming
-controls.enablePan = false; // Disable panning
+controls.enableZoom = true; // Disable zooming
+controls.enablePan = true; // Disable panning
 
 // Handle window resize
 window.addEventListener('resize', debounce(() => {
@@ -103,7 +112,7 @@ loadingManager.onError = function(url) {
 };
 
 // Load HDR environment map
-new RGBELoader(loadingManager).load('assets/montorfano_4k.hdr', function(texture) {
+new RGBELoader(loadingManager).load('assets/montorfano_1k.hdr', function(texture) {
   texture.mapping = THREE.EquirectangularReflectionMapping;
   scene.background = texture;
   scene.environment = texture;
@@ -244,7 +253,7 @@ const ktx2Loader = new KTX2Loader()
   .detectSupport(renderer); // Pass the renderer to detect hardware capabilities
 
 // Load HDR environment map
-ktx2Loader.load('assets/montorfano_4k.ktx2', function(texture) {
+ktx2Loader.load('assets/montorfano_1k.ktx2', function(texture) {
   texture.mapping = THREE.EquirectangularReflectionMapping;
   scene.background = texture;
   scene.environment = texture;
@@ -521,15 +530,19 @@ textureItems.forEach(item => {
     const sizeButtons = item.querySelector('.size-buttons');
     const description = item.querySelector('.texture-description');
 
-    // Toggle size buttons and description on image click
     img.addEventListener('click', () => {
-        sizeButtons.classList.toggle('active'); // Toggle visibility
-        description.classList.toggle('active'); // Toggle visibility
+        // Hide active elements first
+        document.querySelectorAll('.size-buttons.active, .texture-description.active').forEach(activeElement => {
+            activeElement.classList.remove('active');
+        });
+
+        // Toggle visibility for the clicked item
+        sizeButtons.classList.toggle('active'); 
+        description.classList.toggle('active'); 
     });
 
-    // Optionally, you can add logic to select a size and apply it to the scene
     const sizeButtonsList = sizeButtons.querySelectorAll('button');
-
+    
     sizeButtonsList.forEach(button => {
         button.addEventListener('click', () => {
             const size = button.dataset.size;
@@ -537,3 +550,4 @@ textureItems.forEach(item => {
         });
     });
 });
+
