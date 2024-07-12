@@ -40,24 +40,85 @@ scene.add(ambientLight);
 const dl = new THREE.DirectionalLight(0xFFE5CD, 3);
 dl.castShadow = true;
 dl.position.set(0, 8, -10); // Position it above the scene
-dl.target.position.set(0, -5, 0); // Point it towards the origin (or the target area)
+dl.target.position.set(0, -5, 0); // Point it towards the target area
 scene.add(dl);
 scene.add(dl.target);
 
-// Create the second DirectionalLight
-const pl = new THREE.DirectionalLight(0xFFF0CE, 3); 
-pl.castShadow = true;
-pl.position.set(0, 3.5, 0); // Position it above the scene
-pl.target.position.set(0, 0, 0); // Point it towards the origin (or the target area)
-scene.add(pl);
-scene.add(pl.target);
-
-// Add helpers for visualization
+// Add helper for the first DirectionalLight
 const dlHelper = new THREE.DirectionalLightHelper(dl);
 scene.add(dl);
 
-const plHelper = new THREE.DirectionalLightHelper(pl);
+// // Create the second DirectionalLight
+// const dl2 = new THREE.DirectionalLight(0xFFF0CE, 3); 
+// dl2.castShadow = true;
+// dl2.position.set(0, 3.5, 0); // Position it in the scene
+// dl2.target.position.set(0, 0, 0); // Point it towards the target area
+// scene.add(dl2);
+// scene.add(dl2.target);
+
+// // Add helper for the second DirectionalLight
+// const dl2Helper = new THREE.DirectionalLightHelper(dl2);
+// scene.add(dl2);
+
+// Create the PointLight
+const pl = new THREE.PointLight(0xffffff, 5, 10, 30);
+pl.castShadow = true;
+pl.position.set(-1.4, 3, 3.2);
 scene.add(pl);
+
+// Add helper for the PointLight
+const plHelper = new THREE.PointLightHelper(pl);
+scene.add(pl);
+
+// Create the PointLight2
+const pl2 = new THREE.PointLight(0xffffff, 5, 10, 30);
+pl2.castShadow = true;
+pl2.position.set(1.2, 3, 3.2);
+scene.add(pl2);
+
+// Add helper for the PointLight
+const pl2Helper = new THREE.PointLightHelper(pl2);
+scene.add(pl2);
+
+// Create the PointLight3
+const pl3 = new THREE.PointLight(0xffffff, 5, 10, 30);
+pl3.castShadow = true;
+pl3.position.set(1.2, 3, 0);
+scene.add(pl3);
+
+// Add helper for the PointLight
+const pl3Helper = new THREE.PointLightHelper(pl3);
+scene.add(pl3);
+
+// Create the PointLight4
+const pl4 = new THREE.PointLight(0xffffff, 5, 10, 30);
+pl4.castShadow = true;
+pl4.position.set(-1.4, 3, 0);
+scene.add(pl4);
+
+// Add helper for the PointLight
+const pl4Helper = new THREE.PointLightHelper(pl4);
+scene.add(pl4);
+
+const pl5 = new THREE.PointLight(0xffffff, 5, 10, 30);
+pl5.castShadow = true;
+pl5.position.set(-1.4, 3, -3.2);
+scene.add(pl5);
+
+// Add helper for the PointLight
+const pl5Helper = new THREE.PointLightHelper(pl5);
+scene.add(pl5);
+
+const pl6 = new THREE.PointLight(0xffffff, 5, 10, 30);
+pl6.castShadow = true;
+pl6.position.set(1.2, 3, -3.2);
+scene.add(pl6);
+
+// Add helper for the PointLight
+const pl6Helper = new THREE.PointLightHelper(pl6);
+scene.add(pl6);
+
+
 
 // GUI Setup
 // const gui = new GUI();
