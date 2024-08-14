@@ -79,7 +79,7 @@
         top: 0;
         width: 200px;
         height: 90%;
-        background-color: rgba(255, 255, 255, 0.95); /* Less transparency */
+        background-color: rgba(255, 255, 255, 0.781); /* Less transparency */
         padding: 10px;
         overflow-y: auto;
         z-index: 9999; /* Higher z-index to ensure it's above other content */
@@ -131,12 +131,13 @@
             padding: 5px;
             cursor: pointer;
         }
-
+        .product-name,
         .size-buttons,
 .texture-description {
     display: none;
 }
 
+.product-name.active,
 .size-buttons.active,
 .texture-description.active {
     display: block;
@@ -194,17 +195,24 @@
                 <div class="texture-item">
                     <img src="img/wall2.jpeg" data-texture="img/wall2.jpeg" alt="Texture 1">
                     <div class="texture-details">
+                        <h3 class="product-name">S428</h3>
                         <div class="size-buttons">
                             <button class="wall-size-button" data-size="60x60">60x60</button>
                             <button class="wall-size-button" data-size="20x20">20x20</button>
                             <button class="wall-size-button" data-size="30x30">30x30</button>
                         </div>
-                        <p class="texture-description">This is a description <br> of Texture 1.</p>
+                        
+                        <p class="texture-description"> 
+                            Ceramic Type: Single Layer<br>
+                            Traffic: low<br>
+                            Water Absorption: E>10%, Thickness: 7.6mm<br>
+                            Feature: Rectified, Stain resistant</p>
                     </div>
                 </div>
                 <div class="texture-item">
                     <img src="img/wall3.jpg" data-texture="img/wall3.jpg" alt="Texture 1">
                     <div class="texture-details">
+                        <h3 class="product-name">Name</h3>
                         <div class="size-buttons">
                             <button class="wall-size-button" data-size="60x60">60x60</button>
                             <button class="wall-size-button" data-size="20x20">20x20</button>
@@ -216,6 +224,7 @@
                 <div class="texture-item">
                     <img src="img/wall4.jpg" data-texture="img/wall4.jpg" alt="Texture 1">
                     <div class="texture-details">
+                        <h3 class="product-name">Name</h3>
                         <div class="size-buttons">
                             <button class="wall-size-button" data-size="60x60">60x60</button>
                             <button class="wall-size-button" data-size="20x20">20x20</button>
@@ -227,6 +236,7 @@
                 <div class="texture-item">
                     <img src="img/wall5.jpg" data-texture="img/wall5.jpg" alt="Texture 1">
                     <div class="texture-details">
+                        <h3 class="product-name">Name</h3>
                         <div class="size-buttons">
                             <button class="wall-size-button" data-size="60x60">60x60</button>
                             <button class="wall-size-button" data-size="20x20">20x20</button>
@@ -238,8 +248,21 @@
                 <div class="texture-item">
                     <img src="img/wall6.jpg" data-texture="img/wall6.jpg" alt="Texture 1">
                     <div class="texture-details">
+                        <h3 class="product-name">Name</h3>
                         <div class="size-buttons">
                             <button class="wall-size-button" data-size="60x60">60x60</button>
+                            <button class="wall-size-button" data-size="20x20">20x20</button>
+                            <button class="wall-size-button" data-size="30x30">30x30</button>
+                        </div>
+                        <p class="texture-description">This is a description <br> of Texture 1.</p>
+                    </div>
+                </div>
+                <div class="texture-item">
+                    <img src="img/wall7.jpg" data-texture="img/wall7_box.jpg" alt="Texture 1">
+                    <div class="texture-details">
+                        <h3 class="product-name">Name</h3>
+                        <div class="size-buttons">
+                            <button class="wall-size-button" data-size="20x30">20x30</button>
                             <button class="wall-size-button" data-size="20x20">20x20</button>
                             <button class="wall-size-button" data-size="30x30">30x30</button>
                         </div>
@@ -256,6 +279,7 @@
                 <div class="texture-item">
                     <img src="img/floor2.jpg" data-texture="img/floor2.jpg" alt="Texture 4">
                     <div class="texture-details">
+                        <h3 class="product-name">Name</h3>
                         <div class="size-buttons">
                             <button class="floor-size-button" data-size="60x60">60x60</button>
                             <button class="floor-size-button" data-size="20x20">20x20</button>
@@ -267,6 +291,7 @@
                 <div class="texture-item">
                     <img src="img/floor3.jpeg" data-texture="img/floor3.jpeg" alt="Texture 4">
                     <div class="texture-details">
+                        <h3 class="product-name">Name</h3>
                         <div class="size-buttons">
                             <button class="floor-size-button" data-size="60x60">60x60</button>
                             <button class="floor-size-button" data-size="20x20">20x20</button>
@@ -278,6 +303,7 @@
                 <div class="texture-item">
                     <img src="img/floor4.jpg" data-texture="img/floor4.jpg" alt="Texture 4">
                     <div class="texture-details">
+                        <h3 class="product-name">Name</h3>
                         <div class="size-buttons">
                             <button class="floor-size-button" data-size="60x60">60x60</button>
                             <button class="floor-size-button" data-size="20x20">20x20</button>
@@ -289,6 +315,7 @@
                 <div class="texture-item">
                     <img src="img/floor5.jpeg" data-texture="img/floor5.jpeg" alt="Texture 4">
                     <div class="texture-details">
+                        <h3 class="product-name">Name</h3>
                         <div class="size-buttons">
                             <button class="floor-size-button" data-size="60x60">60x60</button>
                             <button class="floor-size-button" data-size="20x20">20x20</button>
@@ -300,6 +327,7 @@
                 <div class="texture-item">
                     <img src="img/floor6.jpg" data-texture="img/floor6.jpg" alt="Texture 4">
                     <div class="texture-details">
+                        <h3 class="product-name">Name</h3>
                         <div class="size-buttons">
                             <button class="floor-size-button" data-size="60x60">60x60</button>
                             <button class="floor-size-button" data-size="20x20">20x20</button>
