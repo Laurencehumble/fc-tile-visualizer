@@ -141,8 +141,8 @@ scene.add(pl6);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true; // Enable smooth motion
 controls.dampingFactor = 0.2; // Damping inertia
-controls.enableZoom = true; // Disable zooming
-controls.enablePan = true; // Disable panning
+controls.enableZoom = false; // Disable zooming
+controls.enablePan = false; // Disable panning
 
 // Handle window resize
 window.addEventListener('resize', debounce(() => {
@@ -589,16 +589,18 @@ const textureItems = document.querySelectorAll('.texture-item');
 
 textureItems.forEach(item => {
     const img = item.querySelector('img');
+    const productName = item.querySelector('.product-name'); 
     const sizeButtons = item.querySelector('.size-buttons');
     const description = item.querySelector('.texture-description');
 
     img.addEventListener('click', () => {
         // Hide active elements first
-        document.querySelectorAll('.size-buttons.active, .texture-description.active').forEach(activeElement => {
+        document.querySelectorAll('.size-buttons.active, .product-name.active, .texture-description.active').forEach(activeElement => {
             activeElement.classList.remove('active');
         });
 
         // Toggle visibility for the clicked item
+        productName.classList.toggle('active');
         sizeButtons.classList.toggle('active'); 
         description.classList.toggle('active'); 
     });
